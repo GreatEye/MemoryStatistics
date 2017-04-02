@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MemoryStatistics</string>
+    <string name="title_activity_memory_statistics">MemoryStatisticsActivity</string>
 </resources>
