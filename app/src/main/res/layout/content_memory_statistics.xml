@@ -7,32 +7,52 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/process_input_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/font_medium_3"
-            android:background="@drawable/round_rectangle_bg"
-            android:paddingLeft="@dimen/edit_padding_left_and_right"
-            android:paddingRight="@dimen/edit_padding_right"
-            android:paddingTop="@dimen/edit_padding_top_and_bottom"
-            android:paddingBottom="@dimen/edit_padding_top_and_bottom"
-            android:maxLines="1"
-            android:hint="@string/process_name"/>
-        <ImageView
-            android:id="@+id/drop_down"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/process_input_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_medium_3"
+                android:background="@drawable/round_rectangle_bg"
+                android:paddingLeft="@dimen/edit_padding_left_and_right"
+                android:paddingRight="@dimen/edit_padding_right"
+                android:paddingTop="@dimen/edit_padding_top_and_bottom"
+                android:paddingBottom="@dimen/edit_padding_top_and_bottom"
+                android:maxLines="1"
+                android:hint="@string/process_name"/>
+            <ImageView
+                android:id="@+id/drop_down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/drop_down_padding"
+                android:cropToPadding="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/drop_down_margin_right"
+                android:src="@drawable/drop_down"/>
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/confirm_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/drop_down_padding"
-            android:cropToPadding="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/drop_down_margin_right"
-            android:src="@drawable/drop_down"/>
-    </RelativeLayout>
+            android:paddingLeft="@dimen/button_padding_left_and_right"
+            android:paddingRight="@dimen/button_padding_left_and_right"
+            android:paddingTop="@dimen/button_padding_top_and_bottom"
+            android:paddingBottom="@dimen/button_padding_top_and_bottom"
+            android:layout_marginLeft="10dip"
+            android:textSize="@dimen/font_medium_3"
+            android:text="@string/confirm"
+            android:textColor="@color/white"
+            android:background="@drawable/button_bg"/>
+    </LinearLayout>
 
     <lecho.lib.hellocharts.view.LineChartView
         android:id="@+id/chart"

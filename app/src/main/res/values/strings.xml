@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">MemoryStatistics</string>
-    <string name="title_activity_memory_statistics">MemoryStatisticsActivity</string>
 
     <string name="process_name">Process Name</string>
+    <string name="confirm">Confirm</string>
+
+    <string name="toast_process_empty">Process name is empty</string>
 </resources>

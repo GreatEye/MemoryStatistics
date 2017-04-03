@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">MemoryStatistics</string>
-    <string name="title_activity_memory_statistics">MemoryStatisticsActivity</string>
+    <string name="app_name">内存统计</string>
 
     <string name="process_name">进程名</string>
+    <string name="confirm">确定</string>
+
+    <string name="toast_process_empty">进程名为空</string>
 </resources>

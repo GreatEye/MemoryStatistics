@@ -2,10 +2,15 @@ package cn.appleye.memorystatistics.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Debug;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import cn.appleye.memorystatistics.common.model.AppInfo;
 
 /**
  * @author liuliaopu
@@ -35,5 +40,28 @@ public class ProcessUtil {
             tasks.put(processName, totalPrivateDirty);
         }
         return tasks;
+    }
+
+
+    /**
+     * 获取所有已经安装了的应用列表
+     * @param context 上下文
+     * */
+    public static List<AppInfo> getInstalledApp(Context context) {
+        List<AppInfo> appInfos = new ArrayList<>();
+        try{
+            PackageManager pm = context.getPackageManager();
+            List<PackageInfo> packageInfos = pm.getInstalledPackages(0);
+            for(PackageInfo packageInfo : packageInfos) {
+                AppInfo appInfo = new AppInfo();
+                appInfo.mPackageName = packageInfo.packageName;
+                appInfo.mLabel = packageInfo.applicationInfo.loadLabel(pm).toString();
+                appInfos.add(appInfo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return appInfos;
     }
 }
