@@ -26,9 +26,11 @@
             android:id="@+id/drop_down"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/drop_down_padding"
+            android:cropToPadding="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/edit_padding_left_and_right"
+            android:layout_marginRight="@dimen/drop_down_margin_right"
             android:src="@drawable/drop_down"/>
     </RelativeLayout>
 

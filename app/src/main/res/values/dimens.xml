@@ -10,4 +10,7 @@
     <dimen name="edit_padding_left_and_right">10dip</dimen>
     <dimen name="edit_padding_right">40dip</dimen>
     <dimen name="edit_padding_top_and_bottom">5dip</dimen>
+
+    <dimen name="drop_down_padding">5dip</dimen>
+    <dimen name="drop_down_margin_right">5dip</dimen>
 </resources>
