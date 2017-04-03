@@ -1,3 +1,13 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    
+    <dimen name="font_large">32sp</dimen>
+    <dimen name="font_medium">24sp</dimen>
+    <dimen name="font_medium_2">22sp</dimen>
+    <dimen name="font_medium_3">20sp</dimen>
+    <dimen name="font_small">16sp</dimen>
+
+    <dimen name="edit_padding_left_and_right">10dip</dimen>
+    <dimen name="edit_padding_right">40dip</dimen>
+    <dimen name="edit_padding_top_and_bottom">5dip</dimen>
 </resources>

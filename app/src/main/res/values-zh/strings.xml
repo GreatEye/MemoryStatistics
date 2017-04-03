@@ -2,5 +2,5 @@
     <string name="app_name">MemoryStatistics</string>
     <string name="title_activity_memory_statistics">MemoryStatisticsActivity</string>
 
-    <string name="process_name">Process Name</string>
+    <string name="process_name">进程名</string>
 </resources>
