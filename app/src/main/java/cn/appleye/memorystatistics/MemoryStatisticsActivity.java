@@ -24,10 +24,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.appleye.memorystatistics.common.model.AppInfo;
+import cn.appleye.memorystatistics.statisic.StatisticObserver;
+import cn.appleye.memorystatistics.statisic.StatisticsManager;
 import cn.appleye.memorystatistics.utils.LogUtil;
 import cn.appleye.memorystatistics.utils.ProcessUtil;
 
-public class MemoryStatisticsActivity extends AppCompatActivity {
+/**
+ * @author liuliaopu
+ * @date 2017/4/3
+ * */
+public class MemoryStatisticsActivity extends AppCompatActivity implements StatisticObserver {
     private static final String TAG = "MemoryStatistic";
 
     /**进程名称输入空间*/
@@ -55,6 +61,8 @@ public class MemoryStatisticsActivity extends AppCompatActivity {
 
     private Resources mResources;
 
+    private StatisticsManager mStatisticsManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +71,9 @@ public class MemoryStatisticsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mResources = getResources();
+
+        mStatisticsManager = StatisticsManager.getInstance();
+        mStatisticsManager.registerObserver(this);
 
         ButterKnife.bind(this);
 
@@ -133,7 +144,7 @@ public class MemoryStatisticsActivity extends AppCompatActivity {
      * 开始监听当前进程的占用内存状态
      * */
     @OnClick(R.id.confirm_btn)
-    void startTraceMemoryStatis() {
+    void startTraceMemoryStatistic() {
         String processName = mProcessInputView.getText().toString();
         if(TextUtils.isEmpty(processName)) {
             Toast.makeText(this, R.string.toast_process_empty, Toast.LENGTH_SHORT).show();
@@ -144,7 +155,11 @@ public class MemoryStatisticsActivity extends AppCompatActivity {
             return;
         }
 
+        LogUtil.d(TAG, "[startTraceMemoryStatistic] processName = " + processName);
+
         mLastProcessName = processName;
+
+        mStatisticsManager.execute();
     }
 
     @Override
@@ -156,6 +171,21 @@ public class MemoryStatisticsActivity extends AppCompatActivity {
         }
 
         super.onBackPressed();
+    }
+
+    @Override
+    public String getTargetName() {
+        return mLastProcessName;
+    }
+
+    @Override
+    public void onDataObtained(String name, int value) {
+        LogUtil.d(TAG, "[onDataObtained] name = " + name + ", value = " + value);
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        mStatisticsManager.unregisterObserver(this);
     }
 
 
