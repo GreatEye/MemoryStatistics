@@ -63,8 +63,6 @@ public class StatisticsManager {
                     case MSG_MEM_OBTAINED :{
                         HashMap<String, Integer> processMemInfos = (HashMap<String, Integer>)msg.obj;
 
-                        LogUtil.d(TAG, "processMemInfos : " + processMemInfos);
-
                         if(processMemInfos != null) {
                             Iterator<StatisticObserver> iterator = mObservers.iterator();
                             while(iterator.hasNext()) {

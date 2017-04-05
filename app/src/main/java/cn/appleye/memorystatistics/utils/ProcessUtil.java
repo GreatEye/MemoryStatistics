@@ -52,7 +52,7 @@ public class ProcessUtil {
         List<AndroidAppProcess> processes = AndroidProcesses.getRunningAppProcesses();
         for(AndroidAppProcess process : processes) {
             Debug.MemoryInfo[] processMemoryInfo = activityManager.getProcessMemoryInfo(new int[]{process.pid});
-            int totalPrivateDirty = processMemoryInfo[0].getTotalPrivateDirty() * 1024;
+            int totalPrivateDirty = processMemoryInfo[0].getTotalPrivateDirty();
             tasks.put(process.name, totalPrivateDirty);
         }
 
