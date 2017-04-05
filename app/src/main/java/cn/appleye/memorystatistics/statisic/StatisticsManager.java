@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import cn.appleye.memorystatistics.utils.LogUtil;
 import cn.appleye.memorystatistics.utils.ProcessUtil;
 
 /**
@@ -61,6 +62,8 @@ public class StatisticsManager {
                 switch (msg.what) {
                     case MSG_MEM_OBTAINED :{
                         HashMap<String, Integer> processMemInfos = (HashMap<String, Integer>)msg.obj;
+
+                        LogUtil.d(TAG, "processMemInfos : " + processMemInfos);
 
                         if(processMemInfos != null) {
                             Iterator<StatisticObserver> iterator = mObservers.iterator();

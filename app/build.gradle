@@ -43,4 +43,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
+
+    compile 'com.jaredrummler:android-processes:1.0.9'
 }

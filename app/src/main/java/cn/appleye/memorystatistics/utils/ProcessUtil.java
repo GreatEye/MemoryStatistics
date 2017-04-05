@@ -6,6 +6,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Debug;
 
+import com.jaredrummler.android.processes.AndroidProcesses;
+import com.jaredrummler.android.processes.models.AndroidAppProcess;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +27,7 @@ public class ProcessUtil {
      * @return {进程名，占用内存(Pss)}
      * */
     public static HashMap<String, Integer> getTaskInfos(Context context)  {
-        //首先获取到进程管理器
+        /*//首先获取到进程管理器
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         //获取到运行的进程
         List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
@@ -38,7 +41,21 @@ public class ProcessUtil {
             Debug.MemoryInfo[] processMemoryInfo = activityManager.getProcessMemoryInfo(new int[]{runningAppProcess.pid});
             int totalPrivateDirty = processMemoryInfo[0].getTotalPrivateDirty() * 1024;
             tasks.put(processName, totalPrivateDirty);
+        }*/
+
+        //首先获取到进程管理器
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+
+        //初始化进程的集合
+        HashMap<String, Integer> tasks = new HashMap<>();
+
+        List<AndroidAppProcess> processes = AndroidProcesses.getRunningAppProcesses();
+        for(AndroidAppProcess process : processes) {
+            Debug.MemoryInfo[] processMemoryInfo = activityManager.getProcessMemoryInfo(new int[]{process.pid});
+            int totalPrivateDirty = processMemoryInfo[0].getTotalPrivateDirty() * 1024;
+            tasks.put(process.name, totalPrivateDirty);
         }
+
         return tasks;
     }
 
