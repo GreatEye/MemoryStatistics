@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -81,6 +82,8 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
     private List<PointValue> mPointValues = new ArrayList<PointValue>();
     private List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();
 
+    private LineChartData mLineChartData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,8 +117,8 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
         line.setHasLines(true);//是否用线显示。如果为false 则没有曲线只有点显示
         line.setHasPoints(true);//是否显示圆点 如果为false 则没有原点只有点显示（每个数据点都是个大的圆点）
         lines.add(line);
-        LineChartData data = new LineChartData();
-        data.setLines(lines);
+        mLineChartData = new LineChartData();
+        mLineChartData.setLines(lines);
 
         //坐标轴
         Axis axisX = new Axis(); //X轴
@@ -125,7 +128,7 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
         axisX.setTextSize(10);//设置字体大小
         axisX.setMaxLabelChars(8); //最多几个X轴坐标，意思就是你的缩放让X轴上数据的个数7<=x<=mAxisXValues.length
         axisX.setValues(mAxisXValues);  //填充X轴的坐标名称
-        data.setAxisXBottom(axisX); //x 轴在底部
+        mLineChartData.setAxisXBottom(axisX); //x 轴在底部
         //data.setAxisXTop(axisX);  //x 轴在顶部
         axisX.setHasLines(true); //x 轴分割线
 
@@ -133,7 +136,7 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
         Axis axisY = new Axis();  //Y轴
         axisY.setName("");//y轴标注
         axisY.setTextSize(10);//设置字体大小
-        data.setAxisYLeft(axisY);  //Y轴设置在左边
+        mLineChartData.setAxisYLeft(axisY);  //Y轴设置在左边
         //data.setAxisYRight(axisY);  //y轴设置在右边
 
 
@@ -142,7 +145,7 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
         mLineChart.setZoomType(ZoomType.HORIZONTAL);
         mLineChart.setMaxZoom((float) 2);//最大方法比例
         mLineChart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
-        mLineChart.setLineChartData(data);
+        mLineChart.setLineChartData(mLineChartData);
         mLineChart.setVisibility(View.VISIBLE);
     }
 
@@ -251,6 +254,13 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
     @Override
     public void onDataObtained(String name, int value) {
         LogUtil.d(TAG, "[onDataObtained] name = " + name + ", value = " + value + "KB");
+        Calendar calendar = Calendar.getInstance();
+        String date = calendar.get(Calendar.HOUR_OF_DAY) + ":"
+                + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
+        mAxisXValues.add(new AxisValue(mAxisXValues.size()).setLabel(date));
+        mPointValues.add(new PointValue(mAxisXValues.size()-1, value/1024.0f));
+
+        mLineChart.setLineChartData(mLineChartData);
     }
 
     public void onDestroy() {
