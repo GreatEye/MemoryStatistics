@@ -50,6 +50,7 @@ import lecho.lib.hellocharts.view.LineChartView;
 /**
  * @author liuliaopu
  * @date 2017/4/3
+ * 内存动态显示界面
  * */
 public class MemoryStatisticsActivity extends AppCompatActivity implements StatisticObserver {
     private static final String TAG = "MemoryStatistic";
@@ -97,12 +98,11 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memory_statistics);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         mResources = getResources();
 
         mStatisticsManager = StatisticsManager.getInstance();
+        //注册观察者类
         mStatisticsManager.registerObserver(this);
 
         ButterKnife.bind(this);
