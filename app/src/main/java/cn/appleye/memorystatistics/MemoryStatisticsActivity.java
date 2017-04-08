@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -158,6 +160,17 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
         if(mAppInfoList != null) {
             LogUtil.d(TAG, "app size = " + mAppInfoList.size());
         }
+
+        /*排序*/
+        Collections.sort(mAppInfoList, new Comparator<AppInfo>() {
+            @Override
+            public int compare(AppInfo appInfo1, AppInfo appInfo2) {
+                if(appInfo1.mPackageName == null) {
+                    return -1;
+                }
+                return appInfo1.mPackageName.compareTo(appInfo2.mPackageName);
+            }
+        });
     }
 
     /**
