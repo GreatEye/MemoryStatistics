@@ -20,5 +20,5 @@
     <dimen name="normal_padding_left_and_right">10dip</dimen>
     <dimen name="normal_padding_top_and_bottom">5dip</dimen>
 
-    <dimen name="popup_window_height">300dip</dimen>
+    <dimen name="popup_window_height">250dip</dimen>
 </resources>

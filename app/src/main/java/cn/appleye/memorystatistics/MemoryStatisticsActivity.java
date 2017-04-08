@@ -5,7 +5,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import cn.appleye.memorystatistics.common.model.AppInfo;
 import cn.appleye.memorystatistics.statisic.StatisticObserver;
 import cn.appleye.memorystatistics.statisic.StatisticsManager;
@@ -69,7 +73,10 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
     /**上一次的进程名*/
     private String mLastProcessName;
 
+    /**列表显示的应用列表*/
     private List<AppInfo> mAppInfoList;
+    /**所有应用列表*/
+    private List<AppInfo> mTotalAppInfoList;
 
     /**进程列表弹出窗*/
     private PopupWindow mProcessPopupWindow;
@@ -117,7 +124,7 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
         line.setHasLabels(false);//曲线的数据坐标是否加上备注
 //      line.setHasLabelsOnlyForSelected(true);//点击数据坐标提示数据（设置了这个line.setHasLabels(true);就无效）
         line.setHasLines(true);//是否用线显示。如果为false 则没有曲线只有点显示
-        line.setHasPoints(true);//是否显示圆点 如果为false 则没有原点只有点显示（每个数据点都是个大的圆点）
+        line.setHasPoints(false);//是否显示圆点 如果为false 则没有原点只有点显示（每个数据点都是个大的圆点）
         lines.add(line);
         mLineChartData = new LineChartData();
         mLineChartData.setLines(lines);
@@ -141,7 +148,6 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
         mLineChartData.setAxisYLeft(axisY);  //Y轴设置在左边
         //data.setAxisYRight(axisY);  //y轴设置在右边
 
-
         //设置行为属性，支持缩放、滑动以及平移
         mLineChart.setInteractive(true);
         mLineChart.setZoomType(ZoomType.HORIZONTAL);
@@ -156,13 +162,13 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
      * 获取应用列表
      * */
     private void obtainAppList() {
-        mAppInfoList = ProcessUtil.getInstalledApp(this);
-        if(mAppInfoList != null) {
-            LogUtil.d(TAG, "app size = " + mAppInfoList.size());
+        mTotalAppInfoList = ProcessUtil.getInstalledApp(this);
+        if(mTotalAppInfoList != null) {
+            LogUtil.d(TAG, "app size = " + mTotalAppInfoList.size());
         }
 
         /*排序*/
-        Collections.sort(mAppInfoList, new Comparator<AppInfo>() {
+        Collections.sort(mTotalAppInfoList, new Comparator<AppInfo>() {
             @Override
             public int compare(AppInfo appInfo1, AppInfo appInfo2) {
                 if(appInfo1.mPackageName == null) {
@@ -171,6 +177,8 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
                 return appInfo1.mPackageName.compareTo(appInfo2.mPackageName);
             }
         });
+        //初始时，让listview显示所有应用
+        mAppInfoList = mTotalAppInfoList;
     }
 
     /**
@@ -246,6 +254,31 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
         mAxisXValues.clear();
 
         mStatisticsManager.execute();
+    }
+
+    /**
+     * 输入框内容变化控件
+     * */
+    @OnTextChanged(R.id.process_input_view)
+    void onProcessTextChanged(CharSequence text) {
+        if(TextUtils.isEmpty(text)) {
+            mAppInfoList = mTotalAppInfoList;
+        } else {
+            if(mAppInfoList == mTotalAppInfoList) {
+                mAppInfoList = new ArrayList<>();
+            }
+
+            mAppInfoList.clear();
+            for(AppInfo appInfo : mTotalAppInfoList) {
+                if(appInfo.mPackageName != null && appInfo.mPackageName.contains(text)){
+                    mAppInfoList.add(appInfo);
+                }
+            }
+        }
+
+        if(mProcessAdapter != null) {
+            mProcessAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -329,7 +362,22 @@ public class MemoryStatisticsActivity extends AppCompatActivity implements Stati
                 viewHolder.appLabelView.setVisibility(View.VISIBLE);
             }
 
-            viewHolder.processNameView.setText(appInfo.mPackageName);
+            String packageName = appInfo.mPackageName;
+
+            String processValue = mProcessInputView.getText().toString();
+
+            //高亮
+            if(packageName != null && packageName.contains(processValue)) {
+                int startIndex = packageName.indexOf(processValue);
+                int endIndex = startIndex + processValue.length();
+                SpannableString sp = new SpannableString(packageName);
+                sp.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.blue)),
+                        startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                viewHolder.processNameView.setText(sp);
+            } else {
+                viewHolder.processNameView.setText(packageName);
+            }
+
 
             return convertView;
         }
